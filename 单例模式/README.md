@@ -12,9 +12,8 @@
 ### 饿汉式
   这种方法非常简单，因为单例的实例被声明成 static 和 final 变量了，在第一次加载类到内存中时就会初始化，所以创建实例本身是线程安全的。  
   缺点是它不是一种懒加载模式（lazy initialization），单例会在加载类后一开始就被初始化，即使客户端没有调用 getInstance()方法。  
-···
-
-public class Singleton{
+```
+public class Singleton{ ///java
     //类加载时就初始化
     private static final Singleton instance = new Singleton();
     
@@ -24,5 +23,4 @@ public class Singleton{
         return instance;
     }
 }
-
-···
+```
