@@ -21,7 +21,157 @@
   （2）客户端不关心对象的创建过程。  
 
 #### 简单工厂模式角色匹配
-  ![图片](https://github.com/guicaivip/java-GOF/blob/master/%E5%88%9B%E5%BB%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/%E7%AE%80%E5%8D%95%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F.jpg)
+  <div align=center>![图片](https://github.com/guicaivip/java-GOF/blob/master/%E5%88%9B%E5%BB%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/%E7%AE%80%E5%8D%95%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F.jpg)
   1. 工厂(Factory)角色 :简单工厂模式的核心，它负责实现创建所有实例的内部逻辑。工厂类可以被外界直接调用，创建所需的产品对象，它往往由一个具体Java类实现。  
-  2. 抽象产品(Product)角色 :简单工厂模式所创建的所有对象的父类，它负责描述所有实例所共有的公共接口。抽象产品角色可以用一个Java接口或者Java抽象类实现。  
+  2. 抽象产品(AbstractProduct)角色 :简单工厂模式所创建的所有对象的父类，它负责描述所有实例所共有的公共接口。抽象产品角色可以用一个Java接口或者Java抽象类实现。  
   3. 具体产品(Concrete Product)角色:简单工厂模式的创建目标，所有创建的对象都是充当这个角色的某个具体类的实例。具体产品角色由一个具体Java类实现。
+
+#### 实例
+  (1) 创建Shape接口
+```Java
+public interface Shape {
+    void draw();
+}
+```
+
+  (2) 创建实现该接口的具体图形类
+  圆形
+```Java
+public class Circle implements Shape {
+    public Circle() {
+        System.out.println("Circle");
+    }
+    @Override
+    public void draw() {
+        System.out.println("Draw Circle");
+    }
+}
+```
+
+  长方形
+```Java
+public class Rectangle implements Shape {
+    public Rectangle() {
+        System.out.println("Rectangle");
+    }
+    @Override
+    public void draw() {
+        System.out.println("Draw Rectangle");
+    }
+}
+```
+
+  正方形
+```Java
+public class Square implements Shape {
+    public Square() {
+        System.out.println("Square");
+    }
+
+    @Override
+    public void draw() {
+        System.out.println("Draw Square");
+    }
+}
+```
+
+  (3) 创建工厂类：
+```Java
+public class ShapeFactory {
+
+    // 使用 getShape 方法获取形状类型的对象
+    public static Shape getShape(String shapeType) {
+        if (shapeType == null) {
+            return null;
+        }
+        if (shapeType.equalsIgnoreCase("CIRCLE")) {
+            return new Circle();
+        } else if (shapeType.equalsIgnoreCase("RECTANGLE")) {
+            return new Rectangle();
+        } else if (shapeType.equalsIgnoreCase("SQUARE")) {
+            return new Square();
+        }
+        return null;
+    }
+}
+```
+
+  (4) 测试方法
+```Java
+public class Test {
+
+    public static void main(String[] args) {
+
+        // 获取 Circle 的对象，并调用它的 draw 方法
+        Shape circle = ShapeFactory.getShape("CIRCLE");
+        circle.draw();
+
+        // 获取 Rectangle 的对象，并调用它的 draw 方法
+        Shape rectangle = ShapeFactory.getShape("RECTANGLE");
+        rectangle.draw();
+
+        // 获取 Square 的对象，并调用它的 draw 方法
+        Shape square = ShapeFactory.getShape("SQUARE");
+        square.draw();
+    }
+}
+```
+
+  输出结果
+```Java
+Circle
+Draw Circle
+Rectangle
+Draw Rectangle
+Square
+Draw Square
+```
+
+#### 使用反射机制改善简单工厂
+```Java
+package factory_pattern;
+
+/**
+ * 利用反射解决简单工厂每次增加新了产品类都要修改产品工厂的弊端
+ * 
+ *
+ */
+public class ShapeFactory2 {
+    public static Object getClass(Class<? extends Shape> clazz) {
+        Object obj = null;
+
+        try {
+            obj = Class.forName(clazz.getName()).newInstance();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+
+        return obj;
+    }
+}
+```
+
+```Java
+package factory_pattern;
+
+public class Test2 {
+    public static void main(String[] args) {
+
+        Circle circle = (Circle) ShapeFactory2.getClass(factory_pattern.Circle.class);
+        circle.draw();
+
+        Rectangle rectangle = (Rectangle) ShapeFactory2.getClass(factory_pattern.Rectangle.class);
+        rectangle.draw();
+
+        Square square = (Square) ShapeFactory2.getClass(factory_pattern.Square.class);
+        square.draw();
+    }
+
+}
+```
+
+  这种方式虽然符合了开闭原则，但是每一次传入的都是产品类的全部路径，使用比较麻烦。再次改善的方式可以通过`反射+配置文件`的形式来改善，这种方式使用较多。
