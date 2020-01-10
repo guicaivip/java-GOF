@@ -186,3 +186,71 @@ public class Test2 {
   3. 将创建对象的任务委托给多个工厂子类中的某一个，客户端在使用时可以无须关心是哪一个工厂子类创建产品子类，需要时再动态指定，可将具体工厂类的类名存储在配置文件或数据库中。
 
 #### 角色分配
+  ![图片](https://github.com/guicaivip/java-GOF/blob/master/%E5%88%9B%E5%BB%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F.jpg)
+  1. 抽象工厂(Abstract Factory)角色：是工厂方法模式的核心，与应用程序无关。任何在模式中创建的对象的工厂类必须实现这个接口。这个角色常常有Java抽象类来实现。
+  2. 具体工厂(Concrete Factory)角色 ：这是实现抽象工厂接口的具体工厂类，包含与应用程序密切相关的逻辑，并且受到应用程序调用以创建某一种产品对象。
+  3. 抽象产品(Abstract Product)角色 ：工厂方法模式所创建的对象的超类型，也就是产品对象的共同父类或共同拥有的接口。在实际应用中这个角色常常由Java的抽象类来实现。
+  4. 具体产品(Concrete Product)角色 ：这个角色实现了抽象产品角色所定义的接口。某具体产品有专门的具体工厂创建，它们之间往往一一对应。
+
+#### 实例
+  上面简单工厂例子中的图形接口以及相关图像实现类不变。只需要增加一个工厂接口以及实现这个接口的工厂类即可。
+
+  (1) 增加一个工厂接口
+```Java
+public interface Factory {
+    public Shape getShape();
+}
+```
+
+  (2) 增加相关工厂类
+  圆形工厂类
+```Java
+public class CircleFactory implements Factory {
+
+    @Override
+    public Shape getShape() {
+        // TODO Auto-generated method stub
+        return new Circle();
+    }
+
+}
+```
+
+  长方形工厂类
+```Java
+public class RectangleFactory implements Factory{
+
+    @Override
+    public Shape getShape() {
+        // TODO Auto-generated method stub
+        return new Rectangle();
+    }
+
+}
+```
+
+  圆形工厂类
+```Java
+public class SquareFactory implements Factory{
+
+    @Override
+    public Shape getShape() {
+        // TODO Auto-generated method stub
+        return new Square();
+    }
+
+}
+```
+
+  (3) 测试
+```Java
+public class Test {
+
+    public static void main(String[] args) {
+        Factory circlefactory = new CircleFactory();
+        Shape circle = circlefactory.getShape();
+        circle.draw();
+    }
+
+}
+```
