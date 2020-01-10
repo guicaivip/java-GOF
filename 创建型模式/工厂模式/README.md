@@ -176,6 +176,27 @@ public class Test2 {
 
   这种方式虽然符合了开闭原则，但是每一次传入的都是产品类的全部路径，使用比较麻烦。再次改善的方式可以通过**反射+配置文件**的形式来改善，这种方式使用较多。
 
+#### 模式优点
+  * 工厂类含有必要的判断逻辑，可以决定在什么时候创建哪一个产品类的实例，客户端可以免除直接创建产品对象的责任，而仅仅“消费”产品；简单工厂模式通过这种做法实现了对责任的分割，它提供了专门的工厂类用于创建对象。  
+  * 客户端无须知道所创建的具体产品类的类名，只需要知道具体产品类所对应的参数即可，对于一些复杂的类名，通过简单工厂模式可以减少使用者的记忆量。  
+  * 通过引入配置文件，可以在不修改任何客户端代码的情况下更换和增加新的具体产品类，在一定程度上提高了系统的灵活性。  
+  * 当需要引入新的产品是不需要修改客户端的代码，只需要添加相应的产品类并修改工厂类就可以了，所以说从产品的角度上简单工厂模式是符合“开-闭”原则的。
+
+#### 模式缺点
+  * 由于工厂类集中了所有产品创建逻辑，工厂类一般被我们称作“全能类”或者“上帝类”，因为所有的产品创建他都能完成，一旦不能正常工作，整个系统都要受到影响。
+  * 使用简单工厂模式将会增加系统中类的个数，在一定程序上增加了系统的复杂度和理解难度。  
+  * 系统扩展困难，一旦添加新产品就不得不修改工厂逻辑，在产品类型较多时，有可能造成工厂逻辑过于复杂，不利于系统的扩展和维护。所以说从工厂的角度来说简单工厂模式是不符合“开-闭”原则的。
+  * 简单工厂模式由于使用了静态工厂方法，造成工厂角色无法形成基于继承的等级结构。
+
+#### 模式在JDK中的应用
+  JDK类库中广泛使用了简单工厂模式，如工具类java.text.DateFormat，它用于格式化一个本地日期或者时间。
+```Java
+public final static DateFormat getDateInstance();
+public final static DateFormat getDateInstance(int style);
+public final static DateFormat getDateInstance(int style,Locale
+locale);
+```
+
 ### 2. 工厂方法模式
 #### 介绍
   工厂方法模式又称为工厂模式， 在工厂方法模式中，不再提供一个统一的工厂类来创建所有的对象，而是针对不同的对象提供不同的工厂。也就是说 每个对象都有一个与之对应的工厂。  
@@ -255,6 +276,18 @@ public class Test {
 }
 ```
 
+#### 模式优点
+  * 在工厂方法模式中，工厂方法用来创建客户所需要的产品，同时还向客户隐藏了哪种具体产品类将被实例化这一细节，用户只需要关心所需产品对应的工厂，无须关心创建细节，甚至无须知道具体产品类的类名。
+  * 基于工厂角色和产品角色的多态性设计是工厂方法模式的关键。它能够使工厂可以自主确定创建何种产品对象，而如何创建这个对象的细节则完全封装在具体工厂内部。工厂方法模式之所以又被称为多态工厂模式，是因为所有的具体工厂类都具有同一抽象父类。
+  * 使用工厂方法模式的另一个优点是在系统中加入新产品时，无须修改抽象工厂和抽象产品提供的接口，无须修改客户端，也无须修改其他的具体工厂和具体产品，而只要添加一个具体工厂和具体产品就可以了。这样，系统的可扩展性也就变得非常好，完全符合“开闭原则”。
+
+#### 模式缺点
+  * 在添加新产品时，需要编写新的具体产品类，而且还要提供与之对应的具体工厂类，系统中类的个数将成对增加，在一定程度上增加了系统的复杂度，有更多的类需要编译和运行，会给系统带来一些额外的开销。
+  * 由于考虑到系统的可扩展性，需要引入抽象层，在客户端代码中均使用抽象层进行定义，增加了系统的抽象性和理解难度，且在实现时可能需要用到DOM、反射等技术，增加了系统的实现难度。
+
+#### 模式在JDK中的应用
+  1. Object中的toString方法：Object仅仅定义了返回String，由Object的子类来决定如何生成这个字符串。
+
 ### 抽象工厂模式
 #### 介绍
   在工厂方法模式中，生产的都是同一类产品。抽象工厂模式不单单可以创建一个对象，而是可以创建一组对象。  
@@ -266,4 +299,147 @@ public class Test {
   3. 系统结构稳定，不会频繁的增加对象。（因为一旦增加就需要修改原有代码，不符合开闭原则）。
 
 #### 角色分配
-  ![]()
+  ![图片](https://github.com/guicaivip/java-GOF/blob/master/%E5%88%9B%E5%BB%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F.jpg)
+  1. 抽象工厂（Abstract Factory）角色 ：是工厂方法模式的核心，与应用程序无关。任何在模式中创建的对象的工厂类必须实现这个接口。通常使用Java接口或者抽象Java类实现。所有的具体工厂必须实现这个Java接口或继承这个抽象的Java类。  
+  2. 具体工厂类（Conrete Factory）角色 ：这是实现抽象工厂接口的具体工厂类，包含与应用程序密切相关的逻辑，并且受到应用程序调用以创建某一种产品对象。  
+  3. 抽象产品（Abstract Product）角色 ：工厂方法模式所创建的对象的超类型，也就是产品对象的共同父类或共同拥有的接口。通常使用Java接口或者抽象Java类实现这一角色。  
+  4. 具体产品（Concrete Product）角色 ：抽象工厂模式所创建的任何产品对象都是某一个具体产品类的实例。在抽象工厂中创建的产品属于同一产品族，这不同于工厂模式中的工厂只创建单一产品。
+
+#### 实例
+  (1) 创建相关接口
+  枪
+```Java
+public interface Gun {
+    public void shooting();
+}
+```
+
+  子弹
+```Java
+public interface Bullet {
+    public void load();
+}
+```
+
+  (2) 创建接口对应实现类
+  AK类
+```Java
+public class AK implements Gun{
+
+    @Override
+    public void shooting() {
+        System.out.println("shooting with AK");
+        
+    }
+
+}
+```
+
+  M4A1类
+```Java
+public class M4A1 implements Gun {
+
+    @Override
+    public void shooting() {
+        System.out.println("shooting with M4A1");
+
+    }
+
+}
+```
+
+  AK子弹类
+```Java
+public class AK_Bullet implements Bullet {
+
+    @Override
+    public void load() {
+        System.out.println("Load bullets with AK");
+    }
+
+}
+```
+
+  M4A1类
+```Java
+public class M4A1_Bullet implements Bullet {
+
+    @Override
+    public void load() {
+        System.out.println("Load bullets with M4A1");
+    }
+
+}
+```
+
+  (3) 创建工厂接口
+```Java
+public interface Factory {
+    public Gun produceGun();
+    public Bullet produceBullet();
+}
+```
+
+  (4) 创建具体工厂
+  生产AK和AK子弹的工厂
+```Java
+public class AK_Factory implements Factory{
+
+    @Override
+    public Gun produceGun() {
+        return new AK();
+    }
+
+    @Override
+    public Bullet produceBullet() {
+        return new AK_Bullet();
+    }
+
+}
+```
+
+  生产M4A1和M4A1子弹的工厂
+```Java
+public class M4A1_Factory implements Factory{
+
+    @Override
+    public Gun produceGun() {
+        return new M4A1();
+    }
+
+    @Override
+    public Bullet produceBullet() {
+        return new M4A1_Bullet();
+    }
+
+}
+```
+
+  (5) 测试
+```Java
+public class Test {
+
+    public static void main(String[] args) {  
+        
+     Factory factory;
+     Gun gun;
+     Bullet bullet;
+     
+     factory =new AK_Factory();
+     bullet=factory.produceBullet();
+     bullet.load();
+     gun=factory.produceGun();
+     gun.shooting(); 
+     
+    }
+
+}
+```
+
+#### 模式优点
+  * 抽象工厂模式隔离了具体类的生成，使得客户并不需要知道什么被创建。由于这种隔离，更换一个具体工厂就变得相对容易。所有的具体工厂都实现了抽象工厂中定义的那些公共接口，因此只需改变具体工厂的实例，就可以在某种程度上改变整个软件系统的行为。另外，应用抽象工厂模式可以实现高内聚低耦合的设计目的，因此抽象工厂模式得到了广泛的应用。当一个产品族中的多个对象被设计成一起工作时，它能够保证客户端始终只使用同一个产品族中的对象。这对一些需要根据当前环境来决定其行为的软件系统来说，是一种非常实用的设计模式。
+  * 增加新的具体工厂和产品族很方便，无须修改已有系统，符合“开闭原则”。
+
+#### 模式缺点
+  * 在添加新的产品对象时，难以扩展抽象工厂来生产新种类的产品，这是因为在抽象工厂角色中规定了所有可能被创建的产品集合，要支持新种类的产品就意味着要对该接口进行扩展，而这将涉及到对抽象工厂角色及其所有子类的修改，显然会带来较大的不便。
+  * 开闭原则的倾斜性（增加新的工厂和产品族容易，增加新的产品等级结构麻烦）。
