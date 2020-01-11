@@ -9,10 +9,10 @@
 
 ## 3. 角色分配
 * 类适配器模式
-![]()
+![](https://github.com/guicaivip/java-GOF/blob/master/%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F/%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F/%E7%B1%BB%E9%80%82%E9%85%8D%E6%A8%A1%E5%BC%8F.png)
 
 * 对象适配器模式
-！[]()
+![](https://github.com/guicaivip/java-GOF/blob/master/%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F/%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F/%E5%AF%B9%E8%B1%A1%E9%80%82%E9%85%8D%E5%99%A8.png)
 
 1. Target（目标抽象类）：目标抽象类定义客户所需接口，可以是一个抽象类或接口，也可以是具体类。  
 2. Adapter（适配器类）：适配器可以调用另一个接口，作为一个转换器，对Adaptee和Target进行适配，适配器类是适配器模式的核心，在对象适配器中，它通过继承Target并关联一个Adaptee对象使二者产生联系。  
