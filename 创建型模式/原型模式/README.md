@@ -6,9 +6,10 @@
 ## 2. 适用场景
 1. 对象之间相同或相似，即只有个别的几个属性不同时。
 2. 对象的创建过程比较麻烦，但复制比较简单的时候。  
+3. 需要重复地创建相似对象时可以考虑使用原型模式。比如需要在一个循环体内创建对象，假如对象创建过程比较复杂或者循环次数很多的话，使用原型模式不但可以简化创建过程，而且可以使系统的整体性能提高很多。  
 
 ## 3. 角色分配
-![]()
+![](https://github.com/guicaivip/java-GOF/blob/master/%E5%88%9B%E5%BB%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F/%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F.png)
 1. 抽象原型类(Prototype)：规定了具体原型对象必须实现的接口。  
 2. 具体原型类(ConcretePrototype)：实现抽象原型类的 clone() 方法，是可被复制的对象。
 3. 访问类(Client)：调用具体原型类中的 clone() 方法来复制新的对象。
@@ -82,4 +83,158 @@ public class MainTest {
 }
 ```
 
-### 深克隆实例
+### 2. 深克隆实例
+1. 不使用序列化实现深克隆
+原型对象
+```Java
+public class User implements Cloneable {
+
+    private String name;
+    private Integer age;
+
+    private Student student;
+
+    public User(String name, Integer age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    public Student getStudent() {
+        return student;
+    }
+
+    public User setStudent(Student student) {
+        this.student = student;
+        return this;
+    }
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        User result = (User) super.clone();
+        if (result != null) {
+            result.student = (Student) student.clone();
+        }
+        return result;
+    }
+}
+```
+
+引用类型对象
+```Java
+public class Student implements Cloneable{
+
+    private Integer grade;
+
+    public Student(Integer grade) {
+        this.grade = grade;
+    }
+    
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
+}
+```
+
+2. 使用序列化实现深克隆
+原型对象
+```Java
+import java.io.Serializable;
+
+public class User implements Cloneable, Serializable {
+
+    private String name;
+    private Integer age;
+
+    private Student student;
+
+    public User(String name, Integer age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    public Student getStudent() {
+        return student;
+    }
+
+    public User setStudent(Student student) {
+        this.student = student;
+        return this;
+    }
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        
+        return super.clone();
+    }
+}
+```
+
+引用类型对象
+```Java
+import java.io.Serializable;
+
+public class Student implements Serializable/*implements Cloneable*/{
+
+    private Integer grade;
+
+    public Student(Integer grade) {
+        this.grade = grade;
+    }
+
+	public Integer getGrade() {
+		return grade;
+	}
+
+	public void setGrade(Integer grade) {
+		this.grade = grade;
+	}
+    
+//    @Override
+//    protected Object clone() throws CloneNotSupportedException {
+//        return super.clone();
+//    }
+}
+```
+
+客户端调用
+```Java
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+
+public class Test {
+	public static void main(String[] args) throws Exception {
+		User user = new User("Kitty", 21).setStudent(new Student(3));
+		
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		ObjectOutputStream oos = new ObjectOutputStream(baos);
+		
+		oos.writeObject(user);
+		byte[] bytes = baos.toByteArray();
+		
+		ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
+		ObjectInputStream ois = new ObjectInputStream(bais);
+		
+		User user2 = (User)ois.readObject();
+		System.out.println(user.getStudent().getGrade());
+		System.out.println(user2.getStudent().getGrade());
+		
+		user2.setStudent(new Student(2));
+		System.out.println(user.getStudent().getGrade());
+		System.out.println(user2.getStudent().getGrade());
+	}
+}
+```
+
+## 5. 模式优点
+* 使用原型模式创建对象比直接new一个对象在性能上要好的多，因为Object类的clone方法是一个本地方法，它直接操作内存中的二进制流，特别是复制大对象时，性能的差别非常明显。  
+* 简化对象的创建，使得创建对象就像我们在编辑文档时的复制粘贴一样简单。
+
+## 6. 模式缺点
+* 每一个类必须都有一个clone方法，如果这个类的组成不太复杂的话还比较好，如果类的组成很复杂的话，如果想实现深度复制就非常困难了。
+
+## 7. 模式在JDK中的应用
+1. protected native Object clone() 方法
