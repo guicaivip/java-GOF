@@ -6,7 +6,7 @@
 1. 对于大多数请求-响应模式的功能，比较适合使用命令模式，正如命令模式定义说的那样，命令模式对实现记录日志、撤销操作等功能比较方便。
 
 ## 3. 角色分配
-![]()
+![](https://github.com/guicaivip/java-GOF/blob/master/%E8%A1%8C%E4%B8%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/%E5%91%BD%E4%BB%A4%E6%A8%A1%E5%BC%8F/%E5%91%BD%E4%BB%A4%E6%A8%A1%E5%BC%8F.png)
 1. 客户端(Client)角色：创建一个具体命令(ConcreteCommand)对象并确定其接收者。  
 2. 命令(Command)角色：声明了一个给所有具体命令类的抽象接口。  
 3. 具体命令(ConcreteCommand)角色：定义一个接收者和行为之间的弱耦合；实现execute()方法，负责调用接收者的相应操作。execute()方法通常叫做执行方法。  
