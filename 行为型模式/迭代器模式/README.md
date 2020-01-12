@@ -8,7 +8,7 @@
 3. 为遍历不同的聚合结构提供一个统一的接口(支持多态迭代化)。  
 
 ## 3. 角色分配
-![]()
+![](https://github.com/guicaivip/java-GOF/blob/master/%E8%A1%8C%E4%B8%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/%E8%BF%AD%E4%BB%A3%E5%99%A8%E6%A8%A1%E5%BC%8F/%E8%BF%AD%E4%BB%A3%E5%99%A8%E6%A8%A1%E5%BC%8F.png)
 1. 迭代器角色(Iterator)：定义遍历元素所需要的方法，一般来说会有这么三个方法：取得下一个元素的方法next()，判断是否遍历结束的方法hasNext()），移出当前对象的方法remove()。  
 2. 具体迭代器角色(Concrete Iterator)：实现迭代器接口中定义的方法，完成集合的迭代。  
 3. 容器角色(Aggregate): 一般是一个接口，提供一个iterator()方法，例如java中的Collection接口，List接口，Set接口等。  
