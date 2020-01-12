@@ -8,7 +8,7 @@
 3. 控制子类的扩展。  
 
 ## 3. 角色分配
-![]()
+![](https://github.com/guicaivip/java-GOF/blob/master/%E8%A1%8C%E4%B8%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/%E6%A8%A1%E6%9D%BF%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/%E6%A8%A1%E6%9D%BF%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F.jpg)
 1. 抽象模板(Abstract Template)角色：定义一组基本方法供子类实现，定义并实现组合了基本方法的模板方法。  
 2. 具体模板(Concrete Template)角色：实现抽象模板角色定义的基本方法。  
 
